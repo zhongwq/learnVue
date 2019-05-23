@@ -215,7 +215,7 @@ function sameVnode (a, b) {
 // so they need to be treated as different nodes
 /*
   判断当标签是<input>的时候，type是否相同
-  某些浏览器不支持动态修改<input>类型，所以他们被视为不同类型
+  某些浏览器不支持动态修改<input>类型，所以他们被视为不同节点
 */
 function sameInputType (a, b) {
   if (a.tag !== 'input') return true
@@ -409,7 +409,7 @@ patchVnode的规则是这样的：
 
 ![img](https://i.loli.net/2017/08/28/59a4015bb2765.png)
 
-首先，在新老两个VNode节点的左右头尾两侧都有一个变量标记，在遍历过程中这几个变量都会向中间靠拢。当oldStartIdx <= oldEndIdx或者newStartIdx <= newEndIdx时结束循环。
+首先，在新老两个VNode节点的左右头尾两侧都有一个变量标记，在遍历过程中这几个变量都会向中间靠拢。当oldStartIdx > oldEndIdx或者newStartIdx > newEndIdx时结束循环。
 
 索引与VNode节点的对应关系：
 oldStartIdx => oldStartVnode

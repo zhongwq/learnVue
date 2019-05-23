@@ -81,7 +81,7 @@ export function queueWatcher (watcher: Watcher) {
 }
 ```
 
-查看queueWatcher的源码我们发现，Watch对象并不是立即更新视图，而是被push进了一个队列queue，此时状态处于waiting的状态，这时候会继续会有Watch对象被push进这个队列queue，等待下一个tick时，这些Watch对象才会被遍历取出，更新视图。同时，id重复的Watcher不会被多次加入到queue中去，因为在最终渲染时，我们只需要关心数据的最终结果。
+查看queueWatcher的源码我们发现，Watch对象并不是立即更新视图，而是被push进了一个队列queue，此时状态处于waiting的状态，这时候会继续会有Watch对象被push进这个队列queue，等到下一个tick运行时，这些Watch对象才会被遍历取出，更新视图。同时，id重复的Watcher不会被多次加入到queue中去，因为在最终渲染时，我们只需要关心数据的最终结果。
 
 那么，什么是下一个tick？
 
@@ -89,7 +89,7 @@ export function queueWatcher (watcher: Watcher) {
 
 vue.js提供了一个[nextTick](https://cn.vuejs.org/v2/api/#Vue-nextTick)函数，其实也就是上面调用的nextTick。
 
-nextTick的实现比较简单，执行的目的是在microtask或者task中推入一个funtion，在当前栈执行完毕（也行还会有一些排在前面的需要执行的任务）以后执行nextTick传入的funtion，看一下源码：
+nextTick的实现比较简单，执行的目的是在microtask或者task中推入一个function，在当前栈执行完毕（也许还会有一些排在前面的需要执行的任务）以后执行nextTick传入的function，看一下源码：
 
 ```javascript
 /**
@@ -232,7 +232,7 @@ setTimeout 回调会被分配到一个新的 task 中执行，而 Promise 的 re
 参考顾轶灵知乎的回答：https://www.zhihu.com/question/55364497/answer/144215284
 ```
 
-首先是Promise，(Promise.resolve()).then()可以在microtask中加入它的回调，
+首先是Promise，Promise.resolve().then()可以在microtask中加入它的回调，
 
 MutationObserver新建一个textNode的DOM对象，用MutationObserver绑定该DOM并指定回调函数，在DOM变化的时候则会触发回调,该回调会进入microtask，即textNode.data = String(counter)时便会加入该回调。
 
